@@ -1,0 +1,99 @@
+d:\AppProgramming\xampp\htdocs\webbuildcv\
+├── app/                                  # Thư mục chứa mã nguồn chính của ứng dụng
+│   ├── config/                           # Cấu hình ứng dụng
+│   │   ├── config.php                    # Cấu hình chung (đường dẫn, timezone, debug mode...)
+│   │   └── database.php                  # Cấu hình kết nối cơ sở dữ liệu
+│   ├── controllers/                      # Xử lý logic nghiệp vụ, điều hướng request
+│   │   ├── AuthController.php            # Xử lý đăng nhập, đăng ký, quên mật khẩu
+│   │   ├── CVController.php              # Quản lý tạo, chỉnh sửa, xem CV
+│   │   ├── HomeController.php            # Xử lý trang chủ
+│   │   ├── PackageController.php         # Quản lý gói dịch vụ
+│   │   ├── ProfileController.php         # Quản lý hồ sơ người dùng
+│   │   └── TemplateController.php        # Quản lý mẫu CV
+│   ├── helpers/                          # Các lớp tiện ích
+│   │   ├── FileUploader.php              # Xử lý tải lên file (hình ảnh, tài liệu)
+│   │   ├── PDFGenerator.php              # Tạo file PDF từ CV
+│   │   └── Validator.php                 # Kiểm tra và xác thực dữ liệu đầu vào
+│   ├── models/                           # Tương tác với cơ sở dữ liệu
+│   │   ├── Certificate.php               # Quản lý chứng chỉ trong CV
+│   │   ├── ContactInfo.php               # Quản lý thông tin liên hệ trong CV
+│   │   ├── CV.php                        # Quản lý CV
+│   │   ├── Education.php                 # Quản lý học vấn trong CV
+│   │   ├── Experience.php                # Quản lý kinh nghiệm làm việc trong CV
+│   │   ├── ExportHistory.php             # Quản lý lịch sử xuất CV
+│   │   ├── Language.php                  # Quản lý ngôn ngữ trong CV
+│   │   ├── Package.php                   # Quản lý gói dịch vụ
+│   │   ├── Project.php                   # Quản lý dự án trong CV
+│   │   ├── Skill.php                     # Quản lý kỹ năng trong CV
+│   │   ├── Template.php                  # Quản lý mẫu CV
+│   │   ├── User.php                      # Quản lý người dùng
+│   │   └── UserPackage.php               # Quản lý gói dịch vụ của người dùng
+│   └── views/                            # Giao diện người dùng
+│       ├── admin/                        # Giao diện quản trị
+│       │   ├── dashboard.php             # Bảng điều khiển admin
+│       │   ├── packages/                 # Quản lý gói dịch vụ
+│       │   │   ├── create.php            # Tạo gói dịch vụ mới
+│       │   │   ├── edit.php              # Chỉnh sửa gói dịch vụ
+│       │   │   └── index.php             # Danh sách gói dịch vụ
+│       │   ├── templates/                # Quản lý mẫu CV
+│       │   │   ├── create.php            # Tạo mẫu CV mới
+│       │   │   ├── edit.php              # Chỉnh sửa mẫu CV
+│       │   │   └── index.php             # Danh sách mẫu CV
+│       │   └── users/                    # Quản lý người dùng
+│       │       ├── edit.php              # Chỉnh sửa thông tin người dùng
+│       │       └── index.php             # Danh sách người dùng
+│       ├── auth/                         # Xác thực người dùng
+│       │   ├── login.php                 # Đăng nhập
+│       │   ├── register.php              # Đăng ký
+│       │   └── reset-password.php        # Đặt lại mật khẩu
+│       ├── cv/                           # Quản lý CV
+│       │   ├── create.php                # Tạo CV mới
+│       │   ├── edit.php                  # Chỉnh sửa CV
+│       │   ├── index.php                 # Danh sách CV của người dùng
+│       │   ├── preview.php               # Xem trước CV
+│       │   └── sections/                 # Các phần của CV
+│       │       ├── certificates.php      # Phần chứng chỉ
+│       │       ├── contact.php           # Phần thông tin liên hệ
+│       │       ├── education.php         # Phần học vấn
+│       │       ├── experience.php        # Phần kinh nghiệm làm việc
+│       │       ├── languages.php         # Phần ngôn ngữ
+│       │       ├── projects.php          # Phần dự án
+│       │       └── skills.php            # Phần kỹ năng
+│       ├── home/                         # Trang chủ
+│       │   └── index.php                 # Nội dung trang chủ
+│       ├── layouts/                      # Bố cục trang
+│       │   ├── admin.php                 # Bố cục cho trang quản trị
+│       │   ├── app.php                   # Bố cục chung cho ứng dụng
+│       │   ├── footer.php                # Phần chân trang
+│       │   └── header.php                # Phần đầu trang
+│       ├── packages/                     # Gói dịch vụ
+│       │   └── index.php                 # Danh sách gói dịch vụ cho người dùng
+│       ├── profile/                      # Hồ sơ người dùng
+│       │   └── edit.php                  # Chỉnh sửa hồ sơ
+│       └── templates/                    # Mẫu CV
+│           └── index.php                 # Danh sách mẫu CV cho người dùng
+├── assets/                               # Tài nguyên tĩnh
+│   ├── css/                              # Stylesheet
+│   │   ├── admin.css                     # CSS cho trang quản trị
+│   │   ├── app.css                       # CSS chung cho ứng dụng
+│   │   └── templates/                    # CSS cho các mẫu CV
+│   │       ├── template1.css             # CSS cho mẫu CV 1
+│   │       ├── template2.css             # CSS cho mẫu CV 2
+│   │       └── template3.css             # CSS cho mẫu CV 3
+│   ├── images/                           # Hình ảnh
+│   │   ├── logo.png                      # Logo của website
+│   │   └── templates/                    # Hình ảnh mẫu CV
+│   │       ├── template1.jpg             # Hình ảnh mẫu CV 1
+│   │       ├── template2.jpg             # Hình ảnh mẫu CV 2
+│   │       └── template3.jpg             # Hình ảnh mẫu CV 3
+│   └── js/                               # JavaScript
+│       ├── admin.js                      # JS cho trang quản trị
+│       ├── app.js                        # JS chung cho ứng dụng
+│       └── cv-builder.js                 # JS cho trình tạo CV
+├── uploads/                              # Lưu trữ file người dùng tải lên
+│   ├── profile_pictures/                 # Ảnh đại diện người dùng
+│   └── templates/                        # File mẫu CV tải lên
+├── .htaccess                             # Cấu hình Apache, xử lý URL rewriting
+├── index.php                             # Điểm vào của ứng dụng, xử lý routing
+├── database.sql                          # Script tạo cơ sở dữ liệu
+└── README.md                             # Thông tin về dự án
