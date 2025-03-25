@@ -1,0 +1,12 @@
+Options -MultiViews
+RewriteEngine On
+RewriteBase /webbuildcv/
+# Nếu request không phải là file thật
+RewriteCond %{REQUEST_FILENAME} !-f
+# Và không phải là thư mục thật
+RewriteCond %{REQUEST_FILENAME} !-d
+# Thì rewrite về index.php
+RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
+
+# Nếu request là thư mục gốc của ứng dụng
+RewriteRule ^$ index.php?url= [QSA,L]
