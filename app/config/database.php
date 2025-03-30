@@ -3,7 +3,8 @@ class Database {
     private $host = 'localhost';
     private $dbname = 'webbuildcv';
     private $username = 'root';
-    private $password = '030303zxzx';
+    // private $password = '030303zxzx';
+    private $password = 'Thang_1412';
     private $conn;
     
     public function getConnection() {

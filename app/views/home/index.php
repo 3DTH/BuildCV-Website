@@ -12,7 +12,7 @@ require_once 'app/views/layouts/header.php';
                 <a href="<?= BASE_URL ?>/templates" class="btn btn-light btn-lg">Bắt đầu ngay</a>
             </div>
             <div class="col-md-6">
-                <img src="<?= BASE_URL ?>/assets/images/hero-image.png" alt="CV Builder" class="img-fluid">
+                <img src="<?= BASE_URL ?>/assets/images/hero.png" alt="CV Builder" class="img-fluid">
             </div>
         </div>
     </div>
