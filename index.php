@@ -32,7 +32,7 @@ $url = explode('/', $url);
 
 // Xác định controller và action
 $controllerName = !empty($url[0]) ? ucfirst($url[0]) : 'Home';
-$actionName = $url[1] ?? 'index';
+$actionName = !empty($url[1]) ? str_replace('-', '', $url[1]) : 'index';
 
 // Xử lý các trường hợp đặc biệt
 if (in_array(strtolower($controllerName), ['auth', 'register', 'login', 'logout'])) {
@@ -64,4 +64,8 @@ if (!method_exists($controller, $actionName)) {
 }
 
 // Gọi method với params
-call_user_func_array([$controller, $actionName], $params);
+if (!empty($params)) {
+    call_user_func_array([$controller, $actionName], $params);
+} else {
+    call_user_func([$controller, $actionName]);
+}

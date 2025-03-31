@@ -60,7 +60,7 @@ require_once 'app/views/layouts/header.php';
             <?php foreach ($freeTemplates as $template): ?>
             <div class="col-md-4">
                 <div class="card h-100">
-                    <img src="<?= BASE_URL ?>/<?= htmlspecialchars($template['thumbnail']) ?>" class="card-img-top" alt="<?= htmlspecialchars($template['name']) ?>">
+                    <img src="<?= BASE_URL ?>/assets/images/<?= htmlspecialchars($template['thumbnail']) ?>" class="card-img-top" alt="<?= htmlspecialchars($template['name']) ?>">
                     <div class="card-body">
                         <h5 class="card-title"><?= htmlspecialchars($template['name']) ?></h5>
                         <p class="card-text"><?= htmlspecialchars($template['description']) ?></p>

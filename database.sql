@@ -175,3 +175,12 @@ INSERT INTO packages (name, description, price, export_limit, duration_days) VAL
 ('Gói Cơ Bản', 'Xuất tối đa 50 lần CV sang PDF', 5000, 50, 30),
 ('Gói Nâng Cao', 'Xuất tối đa 1000 lần CV sang PDF', 10000, 1000, 30),
 ('Gói Không Giới Hạn', 'Xuất không giới hạn CV sang PDF', 20000, NULL, 30);
+
+-- Thêm mẫu CV
+INSERT INTO templates (name, description, thumbnail, css_file, is_premium) VALUES
+('Basic Clean', 'Mẫu CV đơn giản, chuyên nghiệp với bố cục rõ ràng', 'templates/basic-clean.jpg', 'templates/basic-clean.css', FALSE),
+('Modern Dark', 'Mẫu CV hiện đại với tông màu tối sang trọng', 'templates/modern-dark.jpg', 'templates/modern-dark.css', TRUE),
+('Creative Color', 'Mẫu CV sáng tạo với các điểm nhấn màu sắc', 'templates/creative-color.jpg', 'templates/creative-color.css', TRUE),
+('Minimal White', 'Mẫu CV tối giản với nền trắng tinh tế', 'templates/minimal-white.jpg', 'templates/minimal-white.css', FALSE),
+('Professional Blue', 'Mẫu CV chuyên nghiệp với tông màu xanh dương', 'templates/professional-blue.jpg', 'templates/professional-blue.css', TRUE),
+('Two Column', 'Mẫu CV chia đôi với bố cục 2 cột rõ ràng', 'templates/two-column.jpg', 'templates/two-column.css', FALSE);

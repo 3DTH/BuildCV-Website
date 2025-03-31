@@ -10,6 +10,10 @@
     <link href="<?= BASE_URL ?>/assets/css/style.css" rel="stylesheet">
     <link href="<?= BASE_URL ?>/assets/css/layout.css" rel="stylesheet">
     <link href="<?= BASE_URL ?>/assets/css/home.css" rel="stylesheet">
+    <link href="<?= BASE_URL?>/assets/css/profile.css" rel="stylesheet">
+    <link href="<?= BASE_URL?>/assets/css/templates.css" rel="stylesheet">
+    <link href="<?= BASE_URL ?>/assets/css/template-preview.css" rel="stylesheet">
+    <link href="<?= BASE_URL ?>/assets/css/cv-editor.css" rel="stylesheet">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">

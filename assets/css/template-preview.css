@@ -1,0 +1,119 @@
+.cv-preview {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+    font-family: 'Arial', sans-serif;
+}
+
+.cv-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.cv-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
+.position {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    margin-bottom: 15px;
+}
+
+.contact-info {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    color: #34495e;
+}
+
+.contact-info i {
+    margin-right: 5px;
+    color: #3498db;
+}
+
+.cv-section {
+    margin-bottom: 30px;
+}
+
+.cv-section h2 {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.cv-section h2 i {
+    margin-right: 10px;
+    color: #3498db;
+}
+
+.experience-item, .education-item {
+    margin-bottom: 20px;
+}
+
+.experience-item h3, .education-item h3 {
+    font-size: 1.2rem;
+    color: #34495e;
+    margin-bottom: 5px;
+}
+
+.period {
+    color: #7f8c8d;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.degree {
+    color: #34495e;
+    margin-bottom: 5px;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.skill-item {
+    margin-bottom: 15px;
+}
+
+.skill-name {
+    display: block;
+    margin-bottom: 5px;
+    color: #34495e;
+}
+
+.skill-level {
+    height: 8px;
+    background-color: #ecf0f1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.skill-bar {
+    height: 100%;
+    background-color: #3498db;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+/* Preview Modal Styles */
+#templatePreviewModal .modal-dialog {
+    max-width: 900px;
+}
+
+#templatePreviewModal .modal-body {
+    padding: 30px;
+    background-color: #f8f9fa;
+}
+
+.template-preview-content {
+    background-color: white;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
