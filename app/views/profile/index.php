@@ -3,6 +3,7 @@ $title = 'Hồ sơ của tôi - BuildCV';
 require_once 'app/views/layouts/header.php'; 
 ?>
 
+
 <div class="profile-container">
     <div class="container py-5">
         <div class="row">
