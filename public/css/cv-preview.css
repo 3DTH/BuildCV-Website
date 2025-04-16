@@ -1,0 +1,47 @@
+.cv-preview-wrapper {
+    background: #e0e0e0;
+    padding: 20px;
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    overflow-y: auto;
+}
+
+.cv-preview-container {
+    background: white;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    margin: 0 auto;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+@media print {
+    .cv-preview-wrapper {
+        padding: 0;
+        background: none;
+    }
+
+    .cv-preview-container {
+        box-shadow: none;
+        padding: 0;
+    }
+}
+
+/* Thêm style cho CV document */
+.cv-document {
+    font-size: 12pt;
+    line-height: 1.5;
+}
+
+.cv-header {
+    margin-bottom: 20px;
+}
+
+.cv-section {
+    margin-bottom: 15px;
+}
+
+.cv-item {
+    margin-bottom: 10px;
+}

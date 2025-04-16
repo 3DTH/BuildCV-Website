@@ -1,0 +1,151 @@
+.minimal-white {
+    --primary-color: #2c3e50;
+    --border-color: #e0e0e0;
+    --text-muted: #666;
+    --bg-light: #f8f9fa;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    color: var(--primary-color);
+}
+
+.minimal-white .cv-header {
+    text-align: center;
+    padding: 3rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.minimal-white h1 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.5px;
+}
+
+.minimal-white .position {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.minimal-white .contact-list {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.minimal-white .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+}
+
+.minimal-white .contact-item i {
+    font-size: 0.9rem;
+}
+
+.minimal-white .cv-section {
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.minimal-white .section-title {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.minimal-white .timeline-item {
+    margin-bottom: 2rem;
+}
+
+.minimal-white .item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.minimal-white .item-title {
+    font-weight: 500;
+    margin: 0;
+}
+
+.minimal-white .item-subtitle {
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.minimal-white .period {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.minimal-white .description {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+}
+
+.minimal-white .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.minimal-white .skill-item {
+    background: var(--bg-light);
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+.minimal-white .skill-name {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.minimal-white .skill-level {
+    height: 4px;
+    background: var(--border-color);
+    border-radius: 2px;
+}
+
+.minimal-white .skill-progress {
+    height: 100%;
+    background: var(--primary-color);
+    border-radius: 2px;
+}
+
+.minimal-white .language-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.minimal-white .language-item {
+    text-align: center;
+    padding: 1rem;
+    background: var(--bg-light);
+    border-radius: 4px;
+}
+
+.minimal-white .language-name {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.minimal-white .language-level {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+@media print {
+    .minimal-white {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+}

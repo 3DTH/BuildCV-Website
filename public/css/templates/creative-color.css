@@ -1,0 +1,198 @@
+.creative-color {
+    --primary-color: #6c5ce7;
+    --secondary-color: #00cec9;
+    --accent-color: #fd79a8;
+    --text-color: #2d3436;
+    --bg-color: #ffffff;
+    --section-bg: #f8f9fa;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Header Styles */
+.creative-color .cv-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 3rem 2rem;
+    border-radius: 0 0 50px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.creative-color .cv-header::after {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    right: -50px;
+    width: 100px;
+    height: 100px;
+    background: var(--accent-color);
+    border-radius: 50%;
+    opacity: 0.3;
+}
+
+.creative-color .header-content {
+    position: relative;
+    z-index: 1;
+}
+
+.creative-color h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.creative-color .position {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 1.5rem;
+}
+
+.creative-color .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.creative-color .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.creative-color .contact-item i {
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Section Styles */
+.creative-color .cv-section {
+    margin: 2rem 0;
+    padding: 2rem;
+    background: var(--section-bg);
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.creative-color .section-title {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.creative-color .section-title i {
+    color: var(--accent-color);
+}
+
+/* Grid Layout */
+.creative-color .cv-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+/* Experience & Education Items */
+.creative-color .timeline-item {
+    position: relative;
+    padding-left: 2rem;
+    margin-bottom: 2rem;
+    border-left: 2px solid var(--secondary-color);
+}
+
+.creative-color .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 0;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: var(--secondary-color);
+}
+
+.creative-color .item-title {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.creative-color .item-subtitle {
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Skills */
+.creative-color .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.creative-color .skill-item {
+    background: white;
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.creative-color .skill-item:hover {
+    transform: translateY(-5px);
+}
+
+.creative-color .skill-level {
+    width: 100%;
+    height: 6px;
+    background: #eee;
+    border-radius: 3px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+
+.creative-color .skill-progress {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border-radius: 3px;
+}
+
+/* Languages */
+.creative-color .language-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
+}
+
+.creative-color .language-name {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.creative-color .language-level {
+    color: var(--accent-color);
+}
+
+/* Print Styles */
+@media print {
+    .creative-color {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .creative-color .cv-grid {
+        grid-template-columns: 2fr 1fr;
+    }
+}
