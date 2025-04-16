@@ -85,4 +85,25 @@ class Template {
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
     }
+
+    public function checkPremiumAccess($user_id, $template_id) {
+        // Kiểm tra template có phải premium không
+        $template = $this->getTemplateById($template_id);
+        if (!$template || !$template['is_premium']) {
+            return true; // Template không tồn tại hoặc không phải premium
+        }
+
+        // Kiểm tra gói premium của user
+        $query = "SELECT up.* FROM user_packages up
+                 WHERE up.user_id = :user_id 
+                 AND up.is_active = TRUE 
+                 AND (up.end_date IS NULL OR up.end_date > NOW())
+                 ORDER BY up.end_date DESC LIMIT 1";
+                 
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->execute();
+        
+        return $stmt->fetch() !== false;
+    }
 }

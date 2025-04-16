@@ -102,4 +102,12 @@ class CV {
         $stmt->execute();
         return $stmt->fetchAll();
     }
+
+    public function getTotalCVs() {
+        $query = "SELECT COUNT(*) as total FROM cvs";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
+    }
 }

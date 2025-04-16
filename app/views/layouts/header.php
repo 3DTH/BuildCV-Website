@@ -31,10 +31,10 @@
                         <a class="nav-link" href="<?= BASE_URL ?>/pricing">Bảng Giá</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>/about">Giới Thiệu</a>
+                        <a class="nav-link" href="<?= BASE_URL ?>/home/about">Giới Thiệu</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>/contact">Liên Hệ</a>
+                        <a class="nav-link" href="<?= BASE_URL ?>/home/contact">Liên Hệ</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">

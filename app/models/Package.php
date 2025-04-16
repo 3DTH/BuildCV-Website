@@ -54,4 +54,37 @@ class Package
         return $result ? $result : null;
     }
 
+    public function getTotalActiveSubscriptions()
+    {
+        $query = "SELECT COUNT(*) as total FROM user_packages 
+              WHERE end_date > NOW()";  // Chỉ kiểm tra end_date
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
+    }
+
+    public function getRecentSubscriptions($limit = 5)
+    {
+        $query = "SELECT up.*, u.full_name as user_name, p.name as package_name 
+              FROM user_packages up 
+              JOIN users u ON up.user_id = u.id 
+              JOIN packages p ON up.package_id = p.id 
+              ORDER BY up.created_at DESC LIMIT ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$limit]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getMonthlyRevenue() {
+        $query = "SELECT SUM(p.price) as total 
+                  FROM user_packages up 
+                  JOIN packages p ON up.package_id = p.id 
+                  WHERE MONTH(up.created_at) = MONTH(CURRENT_DATE()) 
+                  AND YEAR(up.created_at) = YEAR(CURRENT_DATE())";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'] ?? 0;
+    }
 }
