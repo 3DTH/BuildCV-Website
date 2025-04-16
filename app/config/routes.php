@@ -26,7 +26,7 @@ $routes = [
   'contact/delete/(\d+)' => ['ContactController', 'delete'],
 
   // Default route
-  '' => ['HomeController', 'index'] 123
+  '' => ['HomeController', 'index'] 
 ];
 
 return $routes;
