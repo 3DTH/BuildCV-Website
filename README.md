@@ -11,10 +11,4 @@ Nền tảng web giúp người dùng tạo và quản lý CV trực tuyến v�
 - Gói dịch vụ với các quyền lợi khác nhau
 - Giao diện quản trị cho admin
 
-## Cài đặt
-
-### Yêu cầu hệ thống
-
-- PHP 7.4 trở lên
-- MySQL 5.7 trở lên
-- Web server (Apache/Nginx)
+FILE BÁO CÁO: [4NTH-CVBuildWebsite.pdf](https://github.com/user-attachments/files/19774920/4NTH-CVBuildWebsite.pdf)
