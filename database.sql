@@ -163,7 +163,7 @@ CREATE TABLE payments (
     user_id INT NOT NULL,
     package_id INT NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
-    payment_id VARCHAR(255) NOT NULL,  
+    payment_id VARCHAR(255) NOT NULL,  -- PayPal payment ID
     payer_id VARCHAR(255),            -- PayPal payer ID
     payer_email VARCHAR(255),         -- PayPal payer email
     status VARCHAR(50) NOT NULL,       -- 'pending', 'completed', 'failed', 'refunded'

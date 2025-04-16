@@ -11,6 +11,7 @@ $routes = [
     'cv/renderPreview/([a-zA-Z0-9-]+)' => ['CVController', 'renderPreview'],
     'cv/generatePDF' => ['CVController', 'generatePDF'],
 
+
     // Experience routes
     'experience/getAll/(\d+)' => ['ExperienceController', 'getAll'],
     'experience/add' => ['ExperienceController', 'add'],

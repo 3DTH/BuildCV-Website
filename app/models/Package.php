@@ -54,7 +54,6 @@ class Package
         return $result ? $result : null;
     }
 
-
     public function getTotalActiveSubscriptions()
     {
         $query = "SELECT COUNT(*) as total FROM user_packages 
