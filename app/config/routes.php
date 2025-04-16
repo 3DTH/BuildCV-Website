@@ -1,6 +1,24 @@
 <?php
 $routes = [
 
+    // Experience routes
+    'experience/getAll/(\d+)' => ['ExperienceController', 'getAll'],
+    'experience/add' => ['ExperienceController', 'add'],
+    'experience/update/(\d+)' => ['ExperienceController', 'update'],
+    'experience/delete/(\d+)' => ['ExperienceController', 'delete'],
+
+    // Education routes
+    'education/getAll/(\d+)' => ['EducationController', 'getAll'],
+    'education/add' => ['EducationController', 'add'],
+    'education/update/(\d+)' => ['EducationController', 'update'],
+    'education/delete/(\d+)' => ['EducationController', 'delete'],
+
+    // Skills routes
+    'skill/getAll/(\d+)' => ['SkillController', 'getAll'],
+    'skill/add' => ['SkillController', 'add'],
+    'skill/update/(\d+)' => ['SkillController', 'update'],
+    'skill/delete/(\d+)' => ['SkillController', 'delete'],
+
    // Languages routes
    'language/getAll/(\d+)' => ['LanguageController', 'getAll'],
    'language/add' => ['LanguageController', 'add'],

@@ -12,7 +12,19 @@ class Skill {
                   VALUES (:cv_id, :name, :level, :order_index)";
         
         $stmt = $this->db->prepare($query);
-        return $stmt->execute($data);
+        $stmt->bindParam(':cv_id', $data['cv_id']);
+        $stmt->bindParam(':name', $data['name']);
+        $stmt->bindParam(':level', $data['level']);
+        $stmt->bindParam(':order_index', $data['order_index']);
+        
+        return $stmt->execute();
+    }
+
+    public function getById($id) {
+        $query = "SELECT * FROM skills WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function getByCvId($cv_id) {
@@ -20,7 +32,7 @@ class Skill {
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':cv_id', $cv_id);
         $stmt->execute();
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function update($id, $data) {
@@ -31,8 +43,13 @@ class Skill {
                   WHERE id = :id AND cv_id = :cv_id";
         
         $stmt = $this->db->prepare($query);
-        $data['id'] = $id;
-        return $stmt->execute($data);
+        $stmt->bindParam(':name', $data['name']);
+        $stmt->bindParam(':level', $data['level']);
+        $stmt->bindParam(':order_index', $data['order_index']);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':cv_id', $data['cv_id']);
+        
+        return $stmt->execute();
     }
 
     public function delete($id, $cv_id) {

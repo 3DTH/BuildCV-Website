@@ -15,6 +15,14 @@ class Education {
         return $stmt->execute($data);
     }
 
+    public function getById($id) {
+        $query = "SELECT * FROM education WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$id]);
+        return $stmt->fetch();
+    }
+
+
     public function getByCvId($cv_id) {
         $query = "SELECT * FROM education WHERE cv_id = :cv_id ORDER BY order_index ASC";
         $stmt = $this->db->prepare($query);
@@ -32,11 +40,19 @@ class Education {
                   end_date = :end_date,
                   description = :description,
                   order_index = :order_index
-                  WHERE id = :id AND cv_id = :cv_id";
+                  WHERE id = :id";
         
         $stmt = $this->db->prepare($query);
-        $data['id'] = $id;
-        return $stmt->execute($data);
+        $stmt->bindParam(':institution', $data['institution']);
+        $stmt->bindParam(':degree', $data['degree']);
+        $stmt->bindParam(':field_of_study', $data['field_of_study']);
+        $stmt->bindParam(':start_date', $data['start_date']);
+        $stmt->bindParam(':end_date', $data['end_date']);
+        $stmt->bindParam(':description', $data['description']);
+        $stmt->bindParam(':order_index', $data['order_index']);
+        $stmt->bindParam(':id', $id);
+        
+        return $stmt->execute();
     }
 
     public function delete($id, $cv_id) {
