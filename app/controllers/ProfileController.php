@@ -1,12 +1,9 @@
 <?php
-class ProfileController {
+class ProfileController extends BaseController {
     private $userModel;
 
     public function __construct() {
-        if (!isset($_SESSION['user_id'])) {
-            header('Location: ' . BASE_URL . '/auth/login');
-            exit;
-        }
+        $this->checkAuth();
         $this->userModel = new User();
     }
 

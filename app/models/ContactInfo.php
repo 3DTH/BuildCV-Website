@@ -15,6 +15,13 @@ class ContactInfo {
         return $stmt->execute($data);
     }
 
+    public function getById($id) {
+        $query = "SELECT * FROM contact_info WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function getByCvId($cv_id) {
         $query = "SELECT * FROM contact_info WHERE cv_id = :cv_id ORDER BY order_index ASC";
         $stmt = $this->db->prepare($query);
