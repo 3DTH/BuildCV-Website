@@ -18,7 +18,7 @@ $routes = [
    'project/add' => ['ProjectController', 'add'],
    'project/update/(\d+)' => ['ProjectController', 'update'],
    'project/delete/(\d+)' => ['ProjectController', 'delete'],
-   
+
   // Contact routes
   'contact/getAll/(\d+)' => ['ContactController', 'getAll'],
   'contact/add' => ['ContactController', 'add'],
@@ -26,7 +26,7 @@ $routes = [
   'contact/delete/(\d+)' => ['ContactController', 'delete'],
 
   // Default route
-  '' => ['HomeController', 'index']
+  '' => ['HomeController', 'index'] 123
 ];
 
 return $routes;
