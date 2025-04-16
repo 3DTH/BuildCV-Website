@@ -35,13 +35,22 @@ $controllerName = !empty($url[0]) ? ucfirst($url[0]) : 'Home';
 $actionName = !empty($url[1]) ? str_replace('-', '', $url[1]) : 'index';
 
 // Xử lý các trường hợp đặc biệt
-if (in_array(strtolower($controllerName), ['auth', 'register', 'login', 'logout'])) {
+if ($controllerName === 'Admin' && !empty($url[1])) {
+    // Xử lý controller trong thư mục admin
+    $controllerName = ucfirst($url[1]);
+    $actionName = !empty($url[2]) ? $url[2] : 'index';
+    $controllerFile = APP_PATH . '/controllers/admin/' . $controllerName . 'Controller.php';
+    $controllerName .= 'Controller';
+    $params = array_slice($url, 3);
+} else if (in_array(strtolower($controllerName), ['auth', 'register', 'login', 'logout'])) {
     $controllerName = 'AuthController';
     if ($controllerName === 'AuthController' && empty($actionName)) {
         $actionName = strtolower($url[0]) === 'auth' ? 'login' : strtolower($url[0]);
     }
 } else {
     $controllerName .= 'Controller';
+    $controllerFile = APP_PATH . '/controllers/' . $controllerName . '.php';
+    $params = array_slice($url, 2);
 }
 
 // Kiểm tra file controller tồn tại

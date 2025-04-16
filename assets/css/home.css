@@ -2,7 +2,7 @@
 .hero {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(135deg, #6B5B95, #FF6B6B);
+    background: linear-gradient(135deg, #6B5B95, #ff6b6b);
 }
 
 .hero::before {

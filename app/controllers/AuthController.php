@@ -43,7 +43,7 @@ class AuthController {
 
     public function login() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $username = trim($_POST['username']); // Thêm trim() để loại bỏ khoảng trắng
+            $username = trim($_POST['username']);
             $password = $_POST['password'];
             
             if (empty($username) || empty($password)) {
@@ -54,17 +54,22 @@ class AuthController {
             
             $user = $this->userModel->login($username, $password);
             if ($user) {
+                // Lưu thêm thông tin user vào session
+                $_SESSION['user'] = [
+                    'id' => $user['id'],
+                    'username' => $user['username'],
+                    'role' => $user['role'],
+                    'email' => $user['email']
+                ];
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role'] = $user['role'];
                 
                 if (isset($_POST['remember'])) {
-                    // Xử lý remember me nếu được chọn
-                    setcookie('remember_token', $user['id'], time() + (86400 * 30), '/'); // 30 ngày
+                    setcookie('remember_token', $user['id'], time() + (86400 * 30), '/');
                 }
                 
-                // Chuyển hướng đến trang dashboard hoặc trang trước đó
-                $redirect = $_SESSION['redirect_url'] ?? ($user['role'] === 'admin' ? '/dashboard' : '/');
+                $redirect = $_SESSION['redirect_url'] ?? ($user['role'] === 'admin' ? '/' : '/');
                 unset($_SESSION['redirect_url']);
                 header("Location: " . BASE_URL . $redirect);
                 exit;

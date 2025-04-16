@@ -1,0 +1,23 @@
+.payment-container {
+    min-height: calc(100vh - 200px);
+}
+
+.payment-details {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.payment-timer {
+    font-size: 1.2rem;
+    color: #dc3545;
+}
+
+#countdown {
+    font-weight: bold;
+}
+
+#paypal-button-container {
+    max-width: 500px;
+    margin: 0 auto;
+}

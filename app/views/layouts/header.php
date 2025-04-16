@@ -14,6 +14,17 @@
     <link href="<?= BASE_URL?>/assets/css/templates.css" rel="stylesheet">
     <link href="<?= BASE_URL ?>/assets/css/template-preview.css" rel="stylesheet">
     <link href="<?= BASE_URL ?>/assets/css/cv-editor.css" rel="stylesheet">
+    <link href="<?= BASE_URL ?>/assets/css/packages.css" rel="stylesheet">
+    <link href="<?= BASE_URL ?>/assets/css/payment.css" rel="stylesheet">
+    <link href="<?= BASE_URL ?>/assets/css/about-contact.css" rel="stylesheet">
+    <link href="<?= BASE_URL ?>/public/css/cv-preview.css" rel="stylesheet">
+    <link href="<?= BASE_URL ?>/public/css/templates/modern-dark.css" rel="stylesheet">
+    <link href="<?= BASE_URL ?>/public/css/templates/creative-color.css" rel="stylesheet">
+    <link href="<?= BASE_URL ?>/public/css/templates/minimal-white.css" rel="stylesheet">
+    <link href="<?= BASE_URL ?>/public/css/templates/professional-blue.css" rel="stylesheet">
+    <link href="<?= BASE_URL ?>/public/css/templates/two-column-blue.css" rel="stylesheet">
+
+
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -28,13 +39,13 @@
                         <a class="nav-link" href="<?= BASE_URL ?>/templates">Mẫu CV</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>/pricing">Bảng Giá</a>
+                        <a class="nav-link" href="<?= BASE_URL ?>/package">Bảng Giá</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>/about">Giới Thiệu</a>
+                        <a class="nav-link" href="<?= BASE_URL ?>/home/about">Giới Thiệu</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= BASE_URL ?>/contact">Liên Hệ</a>
+                        <a class="nav-link" href="<?= BASE_URL ?>/home/contact">Liên Hệ</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
@@ -46,7 +57,7 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="<?= BASE_URL ?>/cv"><i class="fas fa-file-alt"></i> CV của tôi</a></li>
                                 <li><a class="dropdown-item" href="<?= BASE_URL ?>/profile"><i class="fas fa-user"></i> Thông tin cá nhân</a></li>
-                                <?php if ($_SESSION['role'] === 'admin'): ?>
+                                <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
                                     <li><a class="dropdown-item" href="<?= BASE_URL ?>/admin"><i class="fas fa-cog"></i> Quản trị</a></li>
                                 <?php endif; ?>
                                 <li><hr class="dropdown-divider"></li>

@@ -1,0 +1,217 @@
+.professional-blue {
+    --primary-color: #1e88e5;
+    --secondary-color: #0d47a1;
+    --text-color: #333;
+    --text-light: #666;
+    --border-color: #e0e0e0;
+    --bg-light: #f5f5f5;
+    font-family: 'Roboto', sans-serif;
+    color: var(--text-color);
+}
+
+.professional-blue .cv-container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    min-height: 100%;
+}
+
+.professional-blue .sidebar {
+    background: var(--secondary-color);
+    color: white;
+    padding: 2rem;
+}
+
+.professional-blue .profile-section {
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.professional-blue .profile-image {
+    width: 160px;
+    height: 160px;
+    margin: 0 auto 1.5rem;
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    border: 4px solid rgba(255,255,255,0.2);
+    transition: transform 0.3s ease;
+}
+
+.professional-blue .profile-image:hover {
+    transform: scale(1.05);
+}
+
+.professional-blue .profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.professional-blue .profile-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        45deg,
+        rgba(255,255,255,0.1) 0%,
+        rgba(255,255,255,0) 100%
+    );
+    pointer-events: none;
+}
+
+.professional-blue .contact-section {
+    margin-bottom: 2rem;
+}
+
+.professional-blue .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.professional-blue .contact-item i {
+    width: 24px;
+    color: white;
+}
+
+.professional-blue .section-title {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.professional-blue .sidebar .section-title {
+    color: white;
+    border-bottom-color: white;
+}
+
+.professional-blue .main-content {
+    padding: 2rem;
+    background: white;
+}
+
+.professional-blue .name-title {
+    margin-bottom: 2rem;
+}
+
+.professional-blue h1 {
+    font-size: 2.5rem;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.professional-blue .position {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+.professional-blue .timeline-item {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--primary-color);
+    position: relative;
+}
+
+.professional-blue .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    top: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--primary-color);
+}
+
+.professional-blue .item-header {
+    margin-bottom: 0.5rem;
+}
+
+.professional-blue .item-title {
+    font-weight: 500;
+    color: var(--secondary-color);
+    margin-bottom: 0.25rem;
+}
+
+.professional-blue .item-subtitle {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.professional-blue .period {
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.professional-blue .description {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.professional-blue .skills-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.professional-blue .skill-item {
+    background: var(--bg-light);
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+.professional-blue .skill-name {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.professional-blue .skill-level {
+    height: 6px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.professional-blue .skill-progress {
+    height: 100%;
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+.professional-blue .language-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.professional-blue .language-name {
+    font-weight: 500;
+}
+
+.professional-blue .language-level {
+    color: var(--primary-color);
+}
+
+@media print {
+    .professional-blue {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    .professional-blue .cv-container {
+        grid-template-columns: 250px 1fr;
+    }
+}

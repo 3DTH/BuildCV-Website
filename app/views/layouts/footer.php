@@ -30,9 +30,9 @@
                 <div class="col-md-3 mb-3">
                     <h6>Liên hệ</h6>
                     <ul class="list-unstyled text-white">
-                        <li><i class="fas fa-envelope me-2"></i> support@buildcv.vn</li>
+                        <li><i class="fas fa-envelope me-2"></i> 4nth@buildcv.vn</li>
                         <li><i class="fas fa-phone me-2"></i> (84) 123 456 789</li>
-                        <li><i class="fas fa-map-marker-alt me-2"></i> Hà Nội, Việt Nam</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i> TP Hồ Chí Minh, Việt Nam</li>
                     </ul>
                 </div>
             </div>

@@ -8,7 +8,6 @@ class CV {
         $this->db = $database->getConnection();
     }
 
-    // Keep only CV-specific methods
     // Tạo CV mới
     public function createCV($data) {
         $query = "INSERT INTO cvs (user_id, template_id, title, summary, is_public) 
@@ -57,24 +56,26 @@ class CV {
     }
 
     // Cập nhật CV
-    public function updateCV($id, $data) {
-        $query = "UPDATE cvs 
-                  SET template_id = :template_id, 
-                      title = :title, 
-                      summary = :summary, 
-                      is_public = :is_public 
-                  WHERE id = :id AND user_id = :user_id";
-        
-        $stmt = $this->db->prepare($query);
-        
-        $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':user_id', $data['user_id']);
-        $stmt->bindParam(':template_id', $data['template_id']);
-        $stmt->bindParam(':title', $data['title']);
-        $stmt->bindParam(':summary', $data['summary']);
-        $stmt->bindParam(':is_public', $data['is_public']);
-        
-        return $stmt->execute();
+    public function updateCV($cv_id, $data) {
+        try {
+            $sql = "UPDATE cvs SET 
+                    title = :title,
+                    summary = :summary,
+                    is_public = :is_public,
+                    updated_at = NOW()
+                    WHERE id = :id";
+                    
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute([
+                ':title' => $data['title'],
+                ':summary' => $data['summary'],
+                ':is_public' => $data['is_public'],
+                ':id' => $cv_id
+            ]);
+        } catch (PDOException $e) {
+            error_log('CV Update Error: ' . $e->getMessage());
+            return false;
+        }
     }
 
     // Xóa CV
@@ -101,5 +102,13 @@ class CV {
         $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll();
+    }
+
+    public function getTotalCVs() {
+        $query = "SELECT COUNT(*) as total FROM cvs";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
     }
 }

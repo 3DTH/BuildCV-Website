@@ -157,24 +157,29 @@ CREATE TABLE user_packages (
     FOREIGN KEY (package_id) REFERENCES packages(id)
 );
 
--- Bảng lịch sử xuất CV
-CREATE TABLE export_history (
+-- Bảng thanh toán
+CREATE TABLE payments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    cv_id INT NOT NULL,
-    package_id INT,
-    format VARCHAR(20) NOT NULL,
+    package_id INT NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    payment_id VARCHAR(255) NOT NULL,  
+    payer_id VARCHAR(255),            -- PayPal payer ID
+    payer_email VARCHAR(255),         -- PayPal payer email
+    status VARCHAR(50) NOT NULL,       -- 'pending', 'completed', 'failed', 'refunded'
+    currency VARCHAR(10) DEFAULT 'USD',
+    payment_method VARCHAR(50) DEFAULT 'paypal',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (cv_id) REFERENCES cvs(id) ON DELETE CASCADE,
-    FOREIGN KEY (package_id) REFERENCES user_packages(id)
+    FOREIGN KEY (package_id) REFERENCES packages(id)
 );
 
 -- Thêm các gói dịch vụ mẫu
 INSERT INTO packages (name, description, price, export_limit, duration_days) VALUES
-('Gói Cơ Bản', 'Xuất tối đa 50 lần CV sang PDF', 5000, 50, 30),
-('Gói Nâng Cao', 'Xuất tối đa 1000 lần CV sang PDF', 10000, 1000, 30),
-('Gói Không Giới Hạn', 'Xuất không giới hạn CV sang PDF', 20000, NULL, 30);
+('Gói Cơ Bản', 'Trải nghiệm mẫu CV premium trong 3 ngày', 5000, NULL, 3),
+('Gói Nâng Cao', 'Sử dụng mẫu CV premium trong 30 ngày', 20000, NULL, 30),
+('Gói Premium', 'Sử dụng mẫu CV premium trong 90 ngày', 50000, NULL, 90);
 
 -- Thêm mẫu CV
 INSERT INTO templates (name, description, thumbnail, css_file, is_premium) VALUES

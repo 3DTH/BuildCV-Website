@@ -143,7 +143,6 @@ class User
         return $stmt->fetch() !== false;
     }
 
-    // Phương thức cho gói dịch vụ
     // Lấy gói dịch vụ của user
     public function getUserPackages($user_id)
     {
@@ -187,5 +186,106 @@ class User
         $stmt->bindParam(':user_id', $user_id);
         $stmt->execute();
         return $stmt->fetchColumn();
+    }
+
+    // Lấy tất cả users cho admin
+    public function getAllUsers()
+    {
+        $query = "SELECT id, username, email, full_name, role, status, created_at 
+                  FROM users ORDER BY created_at DESC";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    // Cập nhật user bởi admin
+    public function updateUserByAdmin($data)
+    {
+        $query = "UPDATE users 
+                  SET full_name = :full_name, 
+                      email = :email,
+                      phone = :phone,
+                      address = :address,
+                      role = :role,
+                      status = :status
+                  WHERE id = :id";
+
+        $stmt = $this->db->prepare($query);
+        return $stmt->execute($data);
+    }
+
+    // Xóa user
+    public function deleteUser($id)
+    {
+        $query = "DELETE FROM users WHERE id = :id";
+        $stmt = $this->db->prepare($query);
+        return $stmt->execute(['id' => $id]);
+    }
+
+    // Lấy thông tin chi tiết user
+    public function getUserWithDetails($id)
+    {
+        $query = "SELECT u.*, 
+                  COUNT(DISTINCT c.id) as total_cvs,
+                  COUNT(DISTINCT up.id) as total_packages
+                  FROM users u
+                  LEFT JOIN cvs c ON u.id = c.user_id
+                  LEFT JOIN user_packages up ON u.id = up.user_id
+                  WHERE u.id = :id
+                  GROUP BY u.id";
+        
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+    // Lấy CV của user
+    public function getUserCVs($id)
+    {
+        $query = "SELECT * FROM cvs WHERE user_id = :user_id ORDER BY created_at DESC";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':user_id', $id);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    // Toggle status của user
+    public function toggleUserStatus($id)
+    {
+        $query = "UPDATE users SET status = NOT status WHERE id = :id";
+        $stmt = $this->db->prepare($query);
+        return $stmt->execute(['id' => $id]);
+    }
+
+    // Lấy thống kê cho dashboard
+    public function getUserStats()
+    {
+        $query = "SELECT 
+                  COUNT(*) as total_users,
+                  COUNT(CASE WHEN created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) THEN 1 END) as new_users,
+                  COUNT(CASE WHEN status = 1 THEN 1 END) as active_users
+                  FROM users";
+        
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+    // Lấy tổng số users
+    public function getTotalUsers() {
+        $query = "SELECT COUNT(*) as total FROM users";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
+    }
+    
+    // Lấy danh sách users mới nhất
+    public function getRecentUsers($limit = 5) {
+        $query = "SELECT * FROM users ORDER BY created_at DESC LIMIT ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$limit]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

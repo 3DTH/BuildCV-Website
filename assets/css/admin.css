@@ -1,0 +1,191 @@
+/* Layout */
+.admin-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.admin-sidebar {
+    width: 250px;
+    background: #2c3e50;
+    color: white;
+    padding: 1rem;
+}
+
+.admin-main {
+    flex: 1;
+    background: #f8f9fa;
+}
+
+/* Sidebar */
+.sidebar-header {
+    padding: 1rem 0;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.menu-item {
+    margin: 0.5rem 0;
+}
+
+.menu-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.menu-link:hover {
+    background: rgba(255,255,255,0.1);
+    color: white;
+}
+
+.menu-link i {
+    margin-right: 0.75rem;
+}
+
+/* Navbar */
+.admin-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Content */
+.admin-content {
+    padding: 2rem;
+}
+
+/* Dashboard */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    background: #e3f2fd;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+}
+
+.stat-icon i {
+    font-size: 1.5rem;
+    color: #1e88e5;
+}
+
+.stat-info h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #2c3e50;
+}
+
+.stat-info p {
+    margin: 0;
+    color: #666;
+}
+
+/* Tables */
+.table {
+    background: white;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.table th {
+    background: #f8f9fa;
+    font-weight: 500;
+}
+
+/* Cards */
+.card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background: white;
+    border-bottom: 1px solid #eee;
+    padding: 1rem;
+}
+
+.card-header h5 {
+    margin: 0;
+    color: #2c3e50;
+}
+
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        position: fixed;
+        left: -250px;
+        top: 0;
+        bottom: 0;
+        z-index: 1000;
+        transition: left 0.3s;
+    }
+
+    .admin-sidebar.active {
+        left: 0;
+    }
+
+    .admin-main {
+        margin-left: 0;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Add styles for active menu item */
+.menu-link.active {
+    background: rgba(255,255,255,0.2);
+    color: white;
+}
+
+/* Add loading spinner */
+.loading {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.8);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading.show {
+    display: flex;
+}

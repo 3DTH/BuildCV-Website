@@ -2,6 +2,16 @@
 $title = 'Mẫu CV - BuildCV';
 require_once 'app/views/layouts/header.php';
 ?>
+<!-- Add this after the templates-header section -->
+<?php if (isset($_SESSION['user_id'])): ?>
+    <?php $activePackage = $this->packageModel->getUserActivePackage($_SESSION['user_id']); ?>
+    <?php if ($activePackage): ?>
+        <div class="alert alert-info mb-4">
+            <h5>Gói Premium của bạn: <?= htmlspecialchars($activePackage['name']) ?></h5>
+            <p>Thời hạn sử dụng đến: <?= date('d/m/Y', strtotime($activePackage['end_date'])) ?></p>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>
 
 <div class="templates-container">
     <div class="container py-5">
@@ -45,10 +55,18 @@ require_once 'app/views/layouts/header.php';
                                     </div>
                                 <?php endif; ?>
                                 <div class="template-actions">
-                                    <a href="<?= BASE_URL ?>/cv/create?template=<?= $template['id'] ?>"
-                                        class="btn btn-primary btn-use">
-                                        <i class="fas fa-plus"></i> Sử dụng mẫu này
-                                    </a>
+                                    <?php if ($template['is_premium'] && !$hasPremiumAccess): ?>
+                                        <button type="button" class="btn btn-warning btn-upgrade" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#upgradePremiumModal">
+                                            <i class="fas fa-crown"></i> Nâng cấp Premium
+                                        </button>
+                                    <?php else: ?>
+                                        <a href="<?= BASE_URL ?>/cv/create?template=<?= $template['id'] ?>"
+                                            class="btn btn-primary btn-use">
+                                            <i class="fas fa-plus"></i> Sử dụng mẫu này
+                                        </a>
+                                    <?php endif; ?>
                                     <button type="button" class="btn btn-light btn-preview" 
                                         data-bs-toggle="modal" 
                                         data-bs-target="#templatePreviewModal"
@@ -79,6 +97,37 @@ require_once 'app/views/layouts/header.php';
             </div>
             <div class="modal-body">
                 <div class="template-preview-content"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Thêm modal nâng cấp Premium -->
+<div class="modal fade" id="upgradePremiumModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nâng cấp tài khoản Premium</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="premium-packages">
+                    <div class="package-item">
+                        <h4>Gói Premium 3 Ngày</h4>
+                        <p class="price">5.000đ</p>
+                        <a href="<?= BASE_URL ?>/payment/checkout/1" class="btn btn-primary">Chọn gói</a>
+                    </div>
+                    <div class="package-item">
+                        <h4>Gói Premium 30 Ngày</h4>
+                        <p class="price">20.000đ</p>
+                        <a href="<?= BASE_URL ?>/payment/checkout/2" class="btn btn-primary">Chọn gói</a>
+                    </div>
+                    <div class="package-item">
+                        <h4>Gói Premium 90 Ngày</h4>
+                        <p class="price">50.000đ</p>
+                        <a href="<?= BASE_URL ?>/payment/checkout/3" class="btn btn-primary">Chọn gói</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -1,5 +1,6 @@
 <?php
-class CvController {
+
+class CvController extends BaseController {
     private $cvModel;
     private $userModel;
     private $templateModel;
@@ -10,15 +11,11 @@ class CvController {
     private $certificateModel;
     private $projectModel;
     private $contactModel;
+    private $packageModel;
     
 
     public function __construct() {
-        // Kiểm tra đăng nhập cho tất cả các action trừ viewPublic
-        if (!isset($_SESSION['user_id']) && $_GET['action'] !== 'viewPublic') {
-            header('Location: ' . BASE_URL . '/auth/login');
-            exit;
-        }
-
+        $this->checkAuth();
         $this->cvModel = new CV();
         $this->userModel = new User();
         $this->templateModel = new Template();
@@ -29,36 +26,35 @@ class CvController {
         $this->certificateModel = new Certificate();
         $this->projectModel = new Project();
         $this->contactModel = new ContactInfo();
+        $this->packageModel = new Package(); 
     }
 
     public function index() {
         $user_id = $_SESSION['user_id'];
         $cvs = $this->cvModel->getUserCVs($user_id);
+        $activePackage = $this->packageModel->getUserActivePackage($user_id); 
         require_once 'app/views/cv/index.php';
     }
 
-    public function create($templateId = null) {
-        // Kiểm tra template ID từ URL parameter hoặc query string
-        if (!$templateId && isset($_GET['template'])) {
-            $templateId = $_GET['template'];
-        }
-        
-        // Nếu có template ID, lấy thông tin template đã chọn
+    // Tạo CV mới
+    public function create() {
+        $templateId = $_GET['template'] ?? null;
         $selectedTemplate = null;
-        $selectedTemplateId = null;
+        
         if ($templateId) {
             $selectedTemplate = $this->templateModel->getTemplateById($templateId);
-            $selectedTemplateId = $templateId;
         }
 
-        // Xử lý khi form được submit
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $user_id = $_SESSION['user_id'];
+            if (empty($_POST['title']) || empty($_POST['template_id'])) {
+                return $this->jsonResponse(['error' => 'Vui lòng điền đầy đủ thông tin!'], 400);
+            }
+
             $data = [
-                'user_id' => $user_id,
+                'user_id' => $_SESSION['user_id'],
                 'template_id' => $_POST['template_id'],
-                'title' => $_POST['title'],
-                'summary' => $_POST['summary'] ?? '',
+                'title' => trim($_POST['title']),
+                'summary' => trim($_POST['summary'] ?? ''),
                 'is_public' => isset($_POST['is_public']) ? 1 : 0
             ];
 
@@ -67,390 +63,219 @@ class CvController {
                 $_SESSION['success'] = "CV đã được tạo thành công!";
                 header("Location: " . BASE_URL . "/cv/edit/{$cv_id}");
                 exit;
-            } else {
-                $_SESSION['error'] = "Có lỗi xảy ra khi tạo CV!";
             }
+            
+            return $this->jsonResponse(['error' => 'Có lỗi xảy ra khi tạo CV!'], 500);
         }
 
-        // Lấy danh sách template để hiển thị
         $templates = $this->templateModel->getAllTemplates();
         require_once 'app/views/cv/create.php';
     }
 
-    public function edit($cv_id) {
+    // Cập nhật thông tin cơ bản
+    public function updateBasicInfo($cv_id) {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . BASE_URL . '/cv/edit/' . $cv_id);
+            exit;
+        }
+
         $user_id = $_SESSION['user_id'];
         $cv = $this->cvModel->getCVById($cv_id);
-        $user = $this->userModel->getUserById($user_id);
 
-        // Kiểm tra quyền sở hữu CV
         if (!$cv || $cv['user_id'] != $user_id) {
             $_SESSION['error'] = "Bạn không có quyền chỉnh sửa CV này!";
             header('Location: ' . BASE_URL . '/cv');
             exit;
         }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Cập nhật thông tin cơ bản của CV
-            $cvData = [
-                'title' => $_POST['title'],
-                'summary' => $_POST['summary'] ?? '',
-                'is_public' => isset($_POST['is_public']) ? 1 : 0
-            ];
+        $data = [
+            'title' => $_POST['title'],
+            'summary' => $_POST['summary'] ?? '',
+            'is_public' => isset($_POST['is_public']) ? 1 : 0
+        ];
 
-            // Cập nhật thông tin user
-            $userData = [
-                'id' => $user_id,
-                'full_name' => $_POST['full_name'],
-                'email' => $_POST['email'],
-                'phone' => $_POST['phone'],
-                'address' => $_POST['address']
-            ];
-
-            $success = true;
-            if (!$this->cvModel->updateCV($cv_id, $cvData)) {
-                $success = false;
-            }
-            if (!$this->userModel->updateProfile($userData)) {
-                $success = false;
-            }
-
-            if ($success) {
-                $_SESSION['success'] = "CV đã được cập nhật thành công!";
-            } else {
-                $_SESSION['error'] = "Có lỗi xảy ra khi cập nhật CV!";
-            }
+        if ($this->cvModel->updateCV($cv_id, $data)) {
+            $_SESSION['success'] = "Thông tin CV đã được cập nhật thành công!";
+        } else {
+            $_SESSION['error'] = "Có lỗi xảy ra khi cập nhật CV!";
         }
 
-        // Lấy dữ liệu cho form edit
+        header('Location: ' . BASE_URL . '/cv/edit/' . $cv_id);
+        exit;
+    }
+
+    // Cập nhật thông tin cá nhân
+    public function updatePersonalInfo() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . BASE_URL . '/cv');
+            exit;
+        }
+
+        $user_id = $_SESSION['user_id'];
+        $cv_id = $_POST['cv_id'];
+
+        $userData = [
+            'id' => $user_id,
+            'full_name' => $_POST['full_name'],
+            'email' => $_POST['email'],
+            'phone' => $_POST['phone'] ?? null,
+            'address' => $_POST['address'] ?? null
+        ];
+
+        if ($this->userModel->updateProfile($userData)) {
+            $_SESSION['success'] = "Thông tin cá nhân đã được cập nhật thành công!";
+        } else {
+            $_SESSION['error'] = "Có lỗi xảy ra khi cập nhật thông tin cá nhân!";
+        }
+
+        header('Location: ' . BASE_URL . '/cv/edit/' . $cv_id);
+        exit;
+    }
+
+    public function edit($cv_id) {
+        $user_id = $_SESSION['user_id'];
+        $cv = $this->cvModel->getCVById($cv_id); // Sửa $id thành $cv_id
+        
+        if (!$this->verifyOwnership($cv, $user_id)) {
+            $_SESSION['error'] = 'Bạn không có quyền truy cập CV này';
+            header('Location: ' . BASE_URL . '/cv');
+            exit;
+        }
+    
+        $user = $this->userModel->getUserById($user_id);
+        
+        // Load all CV components
         $education = $this->educationModel->getByCvId($cv_id);
-        $experiences = $this->experienceModel->getByCvId($cv_id);
+        $experience = $this->experienceModel->getByCvId($cv_id);
         $skills = $this->skillModel->getByCvId($cv_id);
         $languages = $this->languageModel->getByCvId($cv_id);
         $certificates = $this->certificateModel->getByCvId($cv_id);
         $projects = $this->projectModel->getByCvId($cv_id);
         $contacts = $this->contactModel->getByCvId($cv_id);
-
-        // $education = $this->cvModel->getEducation($cv_id);
-        // $experiences = $this->cvModel->getExperiences($cv_id);
-        // $skills = $this->cvModel->getSkills($cv_id);
-        // $languages = $this->cvModel->getLanguages($cv_id);
-        // $certificates = $this->cvModel->getCertificates($cv_id);
-        // $projects = $this->cvModel->getProjects($cv_id);
-        // $contacts = $this->cvModel->getContactInfo($cv_id);
         
-
         require_once 'app/views/cv/edit.php';
     }
 
     public function delete($cv_id) {
         $user_id = $_SESSION['user_id'];
-        
+        $cv = $this->cvModel->getCVById($cv_id);
+
+        if (!$this->verifyOwnership($cv, $user_id)) {
+            return $this->jsonResponse(['error' => 'Không có quyền xóa CV này!'], 403);
+        }
+
         if ($this->cvModel->deleteCV($cv_id, $user_id)) {
             $_SESSION['success'] = "CV đã được xóa thành công!";
-        } else {
-            $_SESSION['error'] = "Có lỗi xảy ra khi xóa CV!";
-        }
-        
-        header('Location: ' . BASE_URL . '/cv');
-        exit;
-    }
-
-    public function viewPublic($cv_id) {
-        $cv = $this->cvModel->getCVById($cv_id);
-        
-        if (!$cv || !$cv['is_public']) {
-            $this->error404();
-            return;
+            header('Location: ' . BASE_URL . '/cv');
+            exit;
         }
 
-        $education = $this->educationModel->getByCvId($cv_id);
-        $experiences = $this->experienceModel->getByCvId($cv_id);
-        $skills = $this->skillModel->getByCvId($cv_id);
-
-        require_once 'app/views/cv/view.php';
+        return $this->jsonResponse(['error' => 'Có lỗi xảy ra khi xóa CV!'], 500);
     }
-
-    // API endpoints for AJAX requests
-    public function addEducation() {
+    
+    public function renderPreview($templateId) {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
-            echo json_encode(['error' => 'Method not allowed']);
-            return;
+            return $this->jsonResponse(['error' => 'Method not allowed'], 405);
         }
-
-        $cv_id = $_POST['cv_id'];
+    
+        // Get JSON data from request body
+        $data = json_decode(file_get_contents('php://input'), true);
+        if (!$data) {
+            return $this->jsonResponse(['error' => 'Invalid data format'], 400);
+        }
+    
+        // Get user data
         $user_id = $_SESSION['user_id'];
+        $user = $this->userModel->getUserById($user_id);
         
-        // Verify ownership
-        $cv = $this->cvModel->getCVById($cv_id);
-        if (!$cv || $cv['user_id'] != $user_id) {
-            http_response_code(403);
-            echo json_encode(['error' => 'Unauthorized']);
-            return;
+        // Get CV ID from data
+        $cv_id = $data['cv_id'] ?? null;
+        $cv = $cv_id ? $this->cvModel->getCVById($cv_id) : null;
+        
+        // Get template mapping
+        $template = $this->templateModel->getTemplateById($templateId);
+        if (!$template) {
+            return $this->jsonResponse(['error' => 'Template not found'], 404);
         }
+        
+        // Get all CV components from database if CV exists
+        $education = $cv_id ? $this->educationModel->getByCvId($cv_id) : [];
+        $experience = $cv_id ? $this->experienceModel->getByCvId($cv_id) : [];
+        $skills = $cv_id ? $this->skillModel->getByCvId($cv_id) : [];
+        $languages = $cv_id ? $this->languageModel->getByCvId($cv_id) : [];
+        $certificates = $cv_id ? $this->certificateModel->getByCvId($cv_id) : [];
+        $projects = $cv_id ? $this->projectModel->getByCvId($cv_id) : [];
+        $contacts = $cv_id ? $this->contactModel->getByCvId($cv_id) : [];
 
-        $data = [
-            'cv_id' => $cv_id,
-            'institution' => $_POST['institution'],
-            'degree' => $_POST['degree'],
-            'field_of_study' => $_POST['field_of_study'],
-            'start_date' => $_POST['start_date'],
-            'end_date' => $_POST['end_date'],
-            'description' => $_POST['description'],
-            'order_index' => $_POST['order_index'] ?? 0
+        // Merge all data with priority to form data over database data
+        $templateData = [
+            'cv' => $cv ?: [
+                'title' => $data['title'] ?? '',
+                'summary' => $data['summary'] ?? ''
+            ],
+            'personal' => array_merge([
+                'name' => $user['full_name'],
+                'email' => $user['email'],
+                'phone' => $user['phone'],
+                'address' => $user['address']
+            ], $data['personal'] ?? []),
+            'education' => !empty($data['education']) ? $data['education'] : $education,
+            'experience' => !empty($data['experience']) ? $data['experience'] : $experience,
+            'skills' => !empty($data['skills']) ? $data['skills'] : $skills,
+            'languages' => !empty($data['languages']) ? $data['languages'] : $languages,
+            'certificates' => !empty($data['certificates']) ? $data['certificates'] : $certificates,
+            'projects' => !empty($data['projects']) ? $data['projects'] : $projects,
+            'contacts' => !empty($data['contacts']) ? $data['contacts'] : $contacts
         ];
 
-        if ($this->educationModel->add($data)) {
-            $education = $this->educationModel->getByCvId($cv_id);
-            echo json_encode([
-                'success' => true,
-                'data' => $education
-            ]);
-        } else {
-            http_response_code(500);
-            echo json_encode(['error' => 'Failed to add education']);
-        }
-    }
-
-    public function addExperience() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
-            echo json_encode(['error' => 'Method not allowed']);
-            return;
-        }
-
-        $cv_id = $_POST['cv_id'];
-        $user_id = $_SESSION['user_id'];
-        
-        // Verify ownership
-        $cv = $this->cvModel->getCVById($cv_id);
-        if (!$cv || $cv['user_id'] != $user_id) {
-            http_response_code(403);
-            echo json_encode(['error' => 'Unauthorized']);
-            return;
-        }
-
-        $data = [
-            'cv_id' => $cv_id,
-            'company' => $_POST['company'],
-            'position' => $_POST['position'],
-            'start_date' => $_POST['start_date'],
-            'end_date' => $_POST['end_date'],
-            'is_current' => isset($_POST['is_current']) ? 1 : 0,
-            'description' => $_POST['description'],
-            'order_index' => $_POST['order_index'] ?? 0
-        ];
-
-        if ($this->experienceModel->add($data)) {
-            $experiences = $this->experienceModel->getByCvId($cv_id);
-            echo json_encode([
-                'success' => true,
-                'data' => $experiences
-            ]);
-        } else {
-            http_response_code(500);
-            echo json_encode(['error' => 'Failed to add experience']);
-        }
-    }
-
-    public function addSkill() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
-            echo json_encode(['error' => 'Method not allowed']);
-            return;
-        }
-
-        $cv_id = $_POST['cv_id'];
-        $user_id = $_SESSION['user_id'];
-        
-        // Verify ownership
-        $cv = $this->cvModel->getCVById($cv_id);
-        if (!$cv || $cv['user_id'] != $user_id) {
-            http_response_code(403);
-            echo json_encode(['error' => 'Unauthorized']);
-            return;
-        }
-
-        $data = [
-            'cv_id' => $cv_id,
-            'name' => $_POST['name'],
-            'level' => $_POST['level'],
-            'order_index' => $_POST['order_index'] ?? 0
-        ];
-
-        if ($this->skillModel->add($data)) {
-            $skills = $this->skillModel->getByCvId($cv_id);
-            echo json_encode([
-                'success' => true,
-                'data' => $skills
-            ]);
-        } else {
-            http_response_code(500);
-            echo json_encode(['error' => 'Failed to add skill']);
-        }
-    }
-
-    public function addLanguage() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
-            echo json_encode(['error' => 'Method not allowed']);
-            return;
-        }
-
-        $cv_id = $_POST['cv_id'];
-        $user_id = $_SESSION['user_id'];
-        
-        // Verify ownership
-        $cv = $this->cvModel->getCVById($cv_id);
-        if (!$cv || $cv['user_id'] != $user_id) {
-            http_response_code(403);
-            echo json_encode(['error' => 'Unauthorized']);
-            return;
-        }
-
-        $data = [
-            'cv_id' => $cv_id,
-            'name' => $_POST['name'],
-            'proficiency' => $_POST['proficiency'],
-            'order_index' => $_POST['order_index'] ?? 0
-        ];
-
-        if ($this->languageModel->add($data)) {
-            $languages = $this->languageModel->getByCvId($cv_id);
-            echo json_encode([
-                'success' => true,
-                'data' => $languages
-            ]);
-        } else {
-            http_response_code(500);
-            echo json_encode(['error' => 'Failed to add language']);
-        }
-    }
-
-    public function addCertificate() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
-            echo json_encode(['error' => 'Method not allowed']);
-            return;
-        }
-
-        $cv_id = $_POST['cv_id'];
-        $user_id = $_SESSION['user_id'];
-        
-        // Verify ownership
-        $cv = $this->cvModel->getCVById($cv_id);
-        if (!$cv || $cv['user_id'] != $user_id) {
-            http_response_code(403);
-            echo json_encode(['error' => 'Unauthorized']);
-            return;
-        }
-
-        $data = [
-            'cv_id' => $cv_id,
-            'name' => $_POST['name'],
-            'issuer' => $_POST['issuer'],
-            'issue_date' => $_POST['issue_date'],
-            'expiry_date' => $_POST['expiry_date'] ?? null,
-            'description' => $_POST['description'] ?? '',
-            'order_index' => $_POST['order_index'] ?? 0
-        ];
-
-        if ($this->certificateModel->add($data)) {
-            $certificates = $this->certificateModel->getByCvId($cv_id);
-            echo json_encode([
-                'success' => true,
-                'data' => $certificates
-            ]);
-        } else {
-            http_response_code(500);
-            echo json_encode(['error' => 'Failed to add certificate']);
-        }
-    }
-
-    public function addProject() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
-            echo json_encode(['error' => 'Method not allowed']);
-            return;
-        }
-
-        $cv_id = $_POST['cv_id'];
-        $user_id = $_SESSION['user_id'];
-        
-        // Verify ownership
-        $cv = $this->cvModel->getCVById($cv_id);
-        if (!$cv || $cv['user_id'] != $user_id) {
-            http_response_code(403);
-            echo json_encode(['error' => 'Unauthorized']);
-            return;
-        }
-
-        $data = [
-            'cv_id' => $cv_id,
-            'title' => $_POST['title'],
-            'role' => $_POST['role'],
-            'start_date' => $_POST['start_date'],
-            'end_date' => $_POST['end_date'] ?? null,
-            'description' => $_POST['description'],
-            'url' => $_POST['url'] ?? null,
-            'order_index' => $_POST['order_index'] ?? 0
-        ];
-
-        if ($this->projectModel->add($data)) {
-            $projects = $this->projectModel->getByCvId($cv_id);
-            echo json_encode([
-                'success' => true,
-                'data' => $projects
-            ]);
-        } else {
-            http_response_code(500);
-            echo json_encode(['error' => 'Failed to add project']);
-        }
-    }
-
-    public function addContact() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
-            echo json_encode(['error' => 'Method not allowed']);
-            return;
-        }
-
-        $cv_id = $_POST['cv_id'];
-        $user_id = $_SESSION['user_id'];
-        
-        // Verify ownership
-        $cv = $this->cvModel->getCVById($cv_id);
-        if (!$cv || $cv['user_id'] != $user_id) {
-            http_response_code(403);
-            echo json_encode(['error' => 'Unauthorized']);
-            return;
-        }
-
-        $data = [
-            'cv_id' => $cv_id,
-            'type' => $_POST['type'],
-            'value' => $_POST['value'],
-            'is_primary' => isset($_POST['is_primary']) ? 1 : 0,
-            'order_index' => $_POST['order_index'] ?? 0
-        ];
-
-        if ($this->contactModel->add($data)) {
-            if ($data['is_primary']) {
-                $this->contactModel->setPrimary($data['id'], $cv_id, $data['type']);
+        // Get preview template file path
+        $previewFile = "app/views/cv/previews/{$templateId}.php";
+        if (!file_exists($previewFile)) {
+            // If preview template doesn't exist, copy from template
+            $templateFile = "app/views/templates/previews/{$templateId}.php";
+            if (!file_exists($templateFile)) {
+                return $this->jsonResponse(['error' => 'Template file not found'], 404);
             }
-            $contacts = $this->contactModel->getByCvId($cv_id);
-            echo json_encode([
-                'success' => true,
-                'data' => $contacts
-            ]);
-        } else {
-            http_response_code(500);
-            echo json_encode(['error' => 'Failed to add contact']);
+            
+            if (!is_dir('app/views/cv/previews')) {
+                mkdir('app/views/cv/previews', 0777, true);
+            }
+            
+            copy($templateFile, $previewFile);
         }
+    
+        // Start output buffering
+        ob_start();
+        
+        // Make data available to template
+        extract($templateData);
+        
+        // Include preview template
+        include $previewFile;
+        
+        // Get rendered content
+        $content = ob_get_clean();
+        
+        // Return HTML
+        header('Content-Type: text/html');
+        echo $content;
     }
 
-    private function error404() {
-        http_response_code(404);
-        require_once 'app/views/error/404.php';
+    public function generatePDF() {
+        require_once 'vendor/autoload.php';
+        
+        $data = json_decode(file_get_contents('php://input'), true);
+        
+        // Create new mPDF instance without namespace
+        $mpdf = new \mPDF('utf-8', 'A4', '', '', 15, 15, 15, 15);
+        
+        // Add custom CSS and content
+        $mpdf->WriteHTML($data['styles'], 1);
+        $mpdf->WriteHTML($data['content'], 2);
+        
+        // Output PDF
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="cv.pdf"');
+        $mpdf->Output('cv.pdf', 'D');
     }
 }
